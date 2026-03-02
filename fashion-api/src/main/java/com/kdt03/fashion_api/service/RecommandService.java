@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kdt03.fashion_api.domain.NineounceProductVectors512;
@@ -18,8 +19,6 @@ import com.kdt03.fashion_api.repository.NineounceProductVectors768Repository;
 import com.kdt03.fashion_api.repository.RecommandRepository;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -39,9 +38,10 @@ public class RecommandService {
                 this.vectors768Repository = vectors768Repository;
         }
 
+        @Cacheable(value = "recommendations")
         @Transactional(readOnly = true)
         public RecommendationResponseDTO recommand(String productId) {
-                log.info("Finding similar products for Nineounce product: {}", productId);
+                log.info("[SERVICE CALL] recommand for productId: {}", productId);
 
                 // 1. 네이버 유사 상품 검색
                 List<SimilarProductDTO> naverResults = recRepo.findSimilarProducts(productId).stream()
@@ -95,9 +95,10 @@ public class RecommandService {
                                 .build();
         }
 
+        @Cacheable(value = "recommendations768")
         @Transactional(readOnly = true)
         public RecommendationResponseDTO recommand768(String productId) {
-                log.info("Finding 768-dim similar products for Nineounce product: {}", productId);
+                log.info("[SERVICE CALL] recommand768 for productId: {}", productId);
 
                 // 1. 네이버 유사 상품 검색 (768차원)
                 List<SimilarProductDTO> naverResults = recRepo.findSimilar768Products(productId).stream()
@@ -145,7 +146,7 @@ public class RecommandService {
                                 .build();
         }
 
-        @Cacheable(value = "recommendations", key = "#file.originalFilename + #file.size", condition = "#file != null")
+        @Cacheable(value = "recommendations768", key = "#file.originalFilename + #file.size", condition = "#file != null")
         public Internal768RecommendationResponseDTO analyzeInternal768(MultipartFile file) {
                 log.info("Processing 768 analysis for file: {}", file.getOriginalFilename());
 

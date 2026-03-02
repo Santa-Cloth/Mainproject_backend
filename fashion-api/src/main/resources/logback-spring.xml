@@ -37,4 +37,7 @@
         <appender-ref ref="FILE" />
     </logger>
 
+    <!-- 스프링 캐시 로그 상세 출력 -->
+    <logger name="org.springframework.cache" level="DEBUG" />
+
 </configuration>
