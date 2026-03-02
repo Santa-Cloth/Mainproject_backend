@@ -28,6 +28,9 @@ public class SecurityConfig {
         private final MemberRepository memberRepo;
         private final JWTUtil jwtUtil;
 
+        @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins}")
+        private String allowedOrigins;
+
         @Bean
         public BCryptPasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
@@ -63,10 +66,19 @@ public class SecurityConfig {
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+
+                // WebConfig와 동일하게 설정 파일의 allowed-origins를 사용
+                if ("*".equals(allowedOrigins)) {
+                        configuration.addAllowedOriginPattern("*");
+                } else {
+                        for (String origin : allowedOrigins.split(",")) {
+                                configuration.addAllowedOrigin(origin.trim());
+                        }
+                }
+
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                 configuration.setAllowedHeaders(Arrays.asList("*"));
-                configuration.setAllowCredentials(false); // CORS 오류 해결: wildcard origin과 credentials는 함께 사용 불가
+                configuration.setAllowCredentials(false);
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);

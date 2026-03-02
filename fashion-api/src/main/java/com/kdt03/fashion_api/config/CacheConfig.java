@@ -11,6 +11,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
@@ -36,7 +38,9 @@ public class CacheConfig {
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .expireAfterWrite(10, TimeUnit.MINUTES)
                 .maximumSize(100));
-        cacheManager.setCacheNames(Arrays.asList("recommendations", "recommendations768", "analysisResults"));
+        cacheManager.setCacheNames(Arrays.asList(
+                "recommendations", "recommendations768", "analysisResults",
+                "trends", "products", "stores", "sales", "naverProducts"));
         return cacheManager;
     }
 
@@ -51,16 +55,19 @@ public class CacheConfig {
         }
 
         @Override
+        @NonNull
         public String getName() {
             return delegate.getName();
         }
 
         @Override
+        @NonNull
         public Object getNativeCache() {
             return delegate.getNativeCache();
         }
 
         @Override
+        @Nullable
         public ValueWrapper get(Object key) {
             ValueWrapper wrapper = delegate.get(key);
             if (wrapper != null) {
@@ -72,23 +79,35 @@ public class CacheConfig {
         }
 
         @Override
+        @Nullable
         public <T> T get(Object key, java.util.concurrent.Callable<T> valueLoader) {
-            return delegate.get(key, valueLoader);
+            try {
+                return delegate.get(key, valueLoader);
+            } catch (ValueRetrievalException e) {
+                throw e;
+            }
         }
 
         @Override
+        @Nullable
         public <T> T get(Object key, Class<T> type) {
             return delegate.get(key, type);
         }
 
         @Override
-        public void put(Object key, Object value) {
+        public void put(@NonNull Object key, @Nullable Object value) {
             logger.info("[Cache PUT] cache: '{}', key: '{}'", name, key);
             delegate.put(key, value);
         }
 
         @Override
-        public void evict(Object key) {
+        @Nullable
+        public ValueWrapper putIfAbsent(@NonNull Object key, @Nullable Object value) {
+            return delegate.putIfAbsent(key, value);
+        }
+
+        @Override
+        public void evict(@NonNull Object key) {
             delegate.evict(key);
         }
 

@@ -40,10 +40,10 @@ public class ImageUploadService {
     private static final long MAX_FILE_SIZE = 30 * 1024 * 1024; // 30MB
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png");
 
-    @Value("${SUPABASE_URL}")
+    @Value("${app.supabase.url}")
     private String supabaseUrl;
 
-    @Value("${SUPABASE_KEY}")
+    @Value("${app.supabase.key}")
     private String supabaseKey;
 
     @Value("${app.supabase.bucket.upload}")

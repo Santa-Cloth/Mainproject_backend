@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -41,7 +43,9 @@ public class TrendService {
 
     private static final String API_URL = "https://openapi.naver.com/v1/datalab/shopping/category/keywords";
 
+    @Cacheable(value = "trends")
     public YearlyTrendDTO getTrendByYear(int year) {
+        log.info("[SERVICE CALL] getTrendByYear for year: {}", year);
         List<Object[]> results = salesLogRepo.findMonthlySalesTrends(year);
         List<String> allStyles = List.of("트레디셔널", "매니시", "페미닌", "에스닉", "컨템포러리", "내추럴", "젠더리스", "스포츠", "서브컬처", "캐주얼");
         Map<Integer, Map<String, Integer>> monthlyTrends = new TreeMap<>();
@@ -79,12 +83,16 @@ public class TrendService {
                 .build();
     }
 
+    @Cacheable(value = "trends")
     public List<YearlyTrendDTO> getAllTrend() {
+        log.info("[SERVICE CALL] getAllTrend");
         List<Integer> years = salesLogRepo.findDistinctYears();
         return years.stream().map(this::getTrendByYear).toList();
     }
 
+    @Cacheable(value = "trends")
     public List<Map<String, Object>> getIntegratedTrend() {
+        log.info("[SERVICE CALL] getIntegratedTrend (Naver API)");
         String[] styles = {
                 "트레디셔널", "매니시", "에스닉", "컨템포러리",
                 "내추럴", "젠더리스", "스포츠", "서브컬처", "캐주얼"
@@ -99,7 +107,7 @@ public class TrendService {
             trendRequests.add(fetchFromNaver(group));
         }
 
-        CompletableFuture.allOf(trendRequests.toArray(new CompletableFuture[0]))
+        CompletableFuture.allOf(trendRequests.toArray(CompletableFuture[]::new))
                 .thenAccept(v -> {
                     for (CompletableFuture<JsonNode> trend : trendRequests) {
                         try {
@@ -132,8 +140,9 @@ public class TrendService {
                                     finalResult.add(map);
                                 }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (InterruptedException | ExecutionException e) {
+                            log.error("Parallel execution in getIntegratedTrend failed: {}", e.getMessage());
+                            throw new RuntimeException("트렌드 데이터 처리 중 오류 발생", e);
                         }
                     }
                 }).join();

@@ -196,9 +196,13 @@ public class RecommandService {
                                                 .naverProducts(naverProducts)
                                                 .build();
                         }
+                } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
+                        log.error("Parallel execution in analyzeInternal768 failed: {}", e.getMessage(), e);
+                        Thread.currentThread().interrupt(); // Restore the interrupted status
+                        throw new RuntimeException("768 분석 중 오류 발생: " + e.getMessage(), e);
                 } catch (Exception e) {
                         log.error("Error during internal 768 analysis: {}", e.getMessage(), e);
-                        throw new RuntimeException("768 분석 중 오류 발생: " + e.getMessage());
+                        throw new RuntimeException("768 분석 중 오류 발생: " + e.getMessage(), e);
                 }
                 return null;
         }

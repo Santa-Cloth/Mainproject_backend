@@ -99,7 +99,7 @@ public class MemberController {
     }
 
     @Operation(summary = "회원 목록 조회", description = "관리자용 기능으로 등록된 모든 회원 목록을 조회합니다.")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "[{\"id\": \"user1\", \"nickname\": \"홍길동\", \"provider\": \"local\", \"profile\": \"/uploads/profiles/user1...\"}]")))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "[{\"id\": \"user1\", \"nickname\": \"홍길동\", \"provider\": \"local\", \"profile\": \"https://supabase...\"}]")))
     @GetMapping("/list")
     public ResponseEntity<List<MemberResponseDTO>> getAllMembers() {
         return ResponseEntity.ok(memberService.getAllMembers());
@@ -123,7 +123,7 @@ public class MemberController {
 
             String profile = member.getProfile();
             String profilepath = (profile == null || profile.isEmpty())
-                    ? "/uploads/profiles/default-avatar.png"
+                    ? null
                     : profile;
 
             response.put("profile", profilepath);
@@ -194,7 +194,7 @@ public class MemberController {
 
                     String profile = member.getProfile();
                     String profilepath = (profile == null || profile.isEmpty())
-                            ? "/uploads/profiles/default-avatar.png"
+                            ? null
                             : profile;
 
                     response.put("profile", profilepath);
