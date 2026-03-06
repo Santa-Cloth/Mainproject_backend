@@ -148,7 +148,7 @@
 ### 6. 📈 트렌드 분석 (`/api/trends`)
 | Method | Endpoint | Description |
 |:---:|---|---|
-| **GET** | `/api/trends/shopping-insight` | 네이버 쇼핑인사이트 API 기반 10대 스타일 실시간 트렌드 스코어 산출 |
+| **GET** | `/api/trends/shopping-insight` | 네이버 쇼핑인사이트 API 기반 10개 스타일 실시간 트렌드 스코어 산출 |
 | **GET** | `/api/trends/by-year?year=` | 연도별 월간 스타일 판매량 트렌드 조회 (파라미터 없으면 전체 연도) |
 
 ### 7. 💰 판매 통계 (`/api/sales`)
