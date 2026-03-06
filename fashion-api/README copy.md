@@ -2,22 +2,22 @@
 
 > AI 이미지 분석 기반의 유사 상품 검색 및 실시간 패션 트렌드 큐레이션 서비스
 
-## 프로젝트 소개
-- 백엔드 개발 기간: 2025.12.24 ~ 2026.03.05 (6주)
+## 🎯 프로젝트 소개
+- 개발 기간: 2025.12.24 ~ 2026.03.05 (6주)
 - 서비스 목적: 벡터 임베딩 기반 유사도 분석을 통해 유사 스타일 상품을 추천하고 매장 관리자의 상품 운영 의사결정을 지원하는 시스템 구현
 - 핵심 기능: 
-    - 이미지 분석: 업로드 이미지 기반 유사 상품 반환
-    - 스타일 분류: K-Fashion 기준 10개 스타일로 분류한 결과 및 확률 시각화
-    - 시장 트렌드 조회: 네이버 쇼핑 API 기반 검색어별 스타일 트렌드 랭킹 제공
-    - 대시보드: 스타일별 분포 차트, 매장별·기간별 상품 랭킹\스타일 맵 : UMAP 3D 시각화로 자사 상품 스타일 분포 확인
-    - 북마크 : 매입 후보 상품 저장 및 관리
+    - **이미지 분석**: 업로드 이미지 기반 유사 상품 반환
+    - **스타일 분류**: K-Fashion 기준 10개 스타일로 분류한 결과 및 확률 시각화
+    - **시장 트렌드 조회**: 네이버 쇼핑 API 기반 검색어별 스타일 트렌드 랭킹 제공
+    - **대시보드**: 스타일별 분포 차트, 매장별·기간별 상품 랭킹\스타일 맵 : UMAP 3D 시각화로 자사 상품 스타일 분포 확인
+    - **북마크** : 매입 후보 상품 저장 및 관리
 
 ## 🛠 기술 스택 (Tech Stack)
-- **Language**: Java 21
-- **Framework**: Spring Boot 3.5.10
+- **Language**: [Java 21](https://img.shields.io/badge/Java-007396?style=flat-square&logo=data:image/svg%2bxml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciICB2aWV3Qm94PSIwIDAgNTAgNTAiIHdpZHRoPSI1MHB4IiBoZWlnaHQ9IjUwcHgiPjxwYXRoIGQ9Ik0gMjguMTg3NSAtMC4wMDM5MDYyNSBDIDMwLjkzNzUgNi4zNTkzNzUgMTguMzIwMzEzIDEwLjI4OTA2MyAxNy4xNTIzNDQgMTUuNTkzNzUgQyAxNi4wNzQyMTkgMjAuNDYwOTM4IDI0LjY0MDYyNSAyNi4xMjEwOTQgMjQuNjQ0NTMxIDI2LjEyMTA5NCBDIDIzLjM0Mzc1IDI0LjEwNTQ2OSAyMi40MDIzNDQgMjIuNDQxNDA2IDIxLjA5NzY1NiAxOS4zMDQ2ODggQyAxOC44OTA2MjUgMTQgMzQuNTMxMjUgOS4yMDMxMjUgMjguMTg3NSAtMC4wMDM5MDYyNSBaIE0gMzYuNTUwNzgxIDguODEyNSBDIDM2LjU1MDc4MSA4LjgxMjUgMjUuNTAzOTA2IDkuNTExNzE5IDI0Ljk0MTQwNiAxNi41ODIwMzEgQyAyNC42OTE0MDYgMTkuNzMwNDY5IDI3Ljg0Mzc1IDIxLjQxMDE1NiAyNy45Mzc1IDIzLjcwMzEyNSBDIDI4LjAwNzgxMyAyNS41NzAzMTMgMjYuMDUwNzgxIDI3LjEyODkwNiAyNi4wNTA3ODEgMjcuMTI4OTA2IEMgMjYuMDUwNzgxIDI3LjEyODkwNiAyOS42MDE1NjMgMjYuNDYwOTM4IDMwLjcxNDg0NCAyMy42MDU0NjkgQyAzMS45NDUzMTMgMjAuNDM3NSAyOC4zMjgxMjUgMTguMjczNDM4IDI4LjY5MTQwNiAxNS43MzgyODEgQyAyOS4wNDI5NjkgMTMuMzEyNSAzNi41NTA3ODEgOC44MTI1IDM2LjU1MDc4MSA4LjgxMjUgWiBNIDM5LjIzMDQ2OSAyNS4xNDQ1MzEgQyAzOC4wNzQyMTkgMjUuMDkzNzUgMzYuNzg5MDYzIDI1LjQ3NjU2MyAzNS42MjUgMjYuMzEyNSBDIDM3LjkwNjI1IDI1LjgyNDIxOSAzOS44MzU5MzggMjcuMjE4NzUgMzkuODM1OTM4IDI4LjgyODEyNSBDIDM5LjgzNTkzOCAzMi40NTMxMjUgMzQuNTk3NjU2IDM1Ljg3ODkwNiAzNC41OTc2NTYgMzUuODc4OTA2IEMgMzQuNTk3NjU2IDM1Ljg3ODkwNiA0Mi43MDcwMzEgMzQuOTUzMTI1IDQyLjcwNzAzMSAyOSBDIDQyLjcwNzAzMSAyNi41MzkwNjMgNDEuMTUyMzQ0IDI1LjIzNDM3NSAzOS4yMzA0NjkgMjUuMTQ0NTMxIFogTSAxOS4xODM1OTQgMjUuMTUyMzQ0IEMgMTkuMTgzNTk0IDI1LjE1MjM0NCA5LjA2MjUgMjUuMDE1NjI1IDkuMDYyNSAyNy44Nzg5MDYgQyA5LjA2MjUgMzAuODcxMDk0IDIyLjMxNjQwNiAzMS4wODIwMzEgMzEuNzgxMjUgMjkuMjM4MjgxIEMgMzEuNzgxMjUgMjkuMjM4MjgxIDM0LjMwODU5NCAyNy41MDc4MTMgMzQuOTgwNDY5IDI2Ljg2MzI4MSBDIDI4Ljc3NzM0NCAyOC4xMjg5MDYgMTQuNjIxMDk0IDI4LjI5Njg3NSAxNC42MjEwOTQgMjcuMjAzMTI1IEMgMTQuNjIxMDk0IDI2LjE5MTQwNiAxOS4xODM1OTQgMjUuMTUyMzQ0IDE5LjE4MzU5NCAyNS4xNTIzNDQgWiBNIDE2LjczODI4MSAzMC43MjI2NTYgQyAxNS4xODc1IDMwLjcyMjY1NiAxMi44NzEwOTQgMzEuOTIxODc1IDEyLjg3MTA5NCAzMy4wNzgxMjUgQyAxMi44NzEwOTQgMzUuNDAyMzQ0IDI0LjU2MjUgMzcuMTk1MzEzIDMzLjIxODc1IDMzLjc5Njg3NSBMIDMwLjIyMjY1NiAzMS45NjA5MzggQyAyNC4zNTU0NjkgMzMuODM5ODQ0IDEzLjUzOTA2MyAzMy4yMzgyODEgMTYuNzM4MjgxIDMwLjcyMjY1NiBaIE0gMTguMTc5Njg4IDM1LjkyMTg3NSBDIDE2LjA1MDc4MSAzNS45MjE4NzUgMTQuNjcxODc1IDM3LjIzNDM3NSAxNC42NzE4NzUgMzguMjAzMTI1IEMgMTQuNjcxODc1IDQxLjE4NzUgMjcuMzc4OTA2IDQxLjQ4ODI4MSAzMi40MTQwNjMgMzguNDUzMTI1IEwgMjkuMjE0ODQ0IDM2LjQxNzk2OSBDIDI1LjQ1MzEyNSAzOC4wMDc4MTMgMTYuMDA3ODEzIDM4LjIyMjY1NiAxOC4xNzk2ODggMzUuOTIxODc1IFogTSAxMS4wODk4NDQgMzguNjI1IEMgNy42MjEwOTQgMzguNTU0Njg4IDUuMzY3MTg4IDQwLjExMzI4MSA1LjM2NzE4OCA0MS40MDYyNSBDIDUuMzYzMjgxIDQ4LjI4MTI1IDQwLjg5MDYyNSA0Ny45NDkyMTkgNDAuODkwNjI1IDQwLjkyMTg3NSBDIDQwLjg5MDYyNSAzOS43NTc4MTMgMzkuNTE1NjI1IDM5LjIwMzEyNSAzOS4wMTk1MzEgMzguOTM3NSBDIDQxLjkyMTg3NSA0NS42NTYyNSA5Ljk2ODc1IDQ1LjEzNjcxOSA5Ljk2ODc1IDQxLjE3MTg3NSBDIDkuOTY4NzUgNDAuMjY5NTMxIDEyLjMxMjUgMzkuMzgyODEzIDE0LjQ5MjE4OCAzOS44MDg1OTQgTCAxMi42NDQ1MzEgMzguNzU3ODEzIEMgMTIuMTAxNTYzIDM4LjY3NTc4MSAxMS41ODIwMzEgMzguNjMyODEzIDExLjA4OTg0NCAzOC42MjUgWiBNIDQ0LjYzNjcxOSA0My4yNSBDIDM5LjIzNDM3NSA0OC4zNjcxODggMjUuNTQ2ODc1IDUwLjIzNDM3NSAxMS43ODEyNSA0Ny4wNzQyMTkgQyAyNS41NDI5NjkgNTIuNzAzMTI1IDQ0LjU2NjQwNiA0OS41MzUxNTYgNDQuNjM2NzE5IDQzLjI1IFoiLz48L3N2Zz4=&logoColor=white) Java 21
+- **Framework**: <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white"/> Spring Boot 3.5.10
 - **Database**: PostgreSQL(Supabase), pgvector
 - **ORM**: Spring Data JPA, Hibernate 6
-- **Build Tool**: Gradle
+- **Build Tool**: <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white"/>
 
 ## 📂 디렉토리 구조
 
@@ -178,5 +178,5 @@ $ ./gradlew bootRun
 
 > 서버 구동 후 http://localhost:8080/swagger-ui.html 에서 전체 API를 테스트할 수 있습니다.
 
-## ERD
+##  ERD
 <img src="" />
