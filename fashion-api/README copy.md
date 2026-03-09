@@ -20,7 +20,7 @@
 - **Build Tool**: <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white"/> Gradle
 
 ## 🔗 주요 API 명세
-
+   
 ### 1. AI 기반 유사 상품 추천 (`/api/recommand`)
 | Method | Endpoint | Description |
 |:---:|---|---|
@@ -41,7 +41,7 @@
 | **POST** | `/api/members/profile` | 프로필 이미지 Supabase Storage 업로드 및 회원 정보 갱신 |
 | **DELETE** | `/api/members/withdraw` | 비밀번호 확인 후 회원 탈퇴 처리 |
 
-### 3. 관심 상품 — 위시리스트 (`/api/save-products`)
+### 3. 관심 상품 (`/api/save-products`)
 | Method | Endpoint | Description |
 |:---:|---|---|
 | **GET** | `/api/save-products` | 현재 로그인 회원의 관심 상품 목록 조회 |
@@ -85,7 +85,7 @@
 | Method | Endpoint | Description |
 |:---:|---|---|
 | **GET** | `/api/logs/view` | 브라우저 내장 실시간 서버 로그 대시보드 (HTML 반환) |
-| **GET** | `/api/logs/raw` | 서버 로그 파일 마지막 1000줄 Raw 텍스트 반환 |
+| **GET** | `/api/logs/raw` | 서버 로그 파일 마지막 1000줄 Raw 텍스트 반환 |   
 
 ## ⚙ 핵심 기술 설계
 
