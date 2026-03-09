@@ -1,4 +1,4 @@
-# 👔 Wizard of Ounce (Backend)
+# 🧙‍♂️ Wizard of Ounce (Backend)
 
 > AI 이미지 분석 기반의 유사 상품 검색 및 실시간 패션 트렌드 큐레이션 서비스
 
