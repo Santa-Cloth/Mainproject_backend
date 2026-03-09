@@ -89,32 +89,44 @@
 
 ## ⚙ 핵심 기술 설계
 
-### 1. Java 21 가상 스레드
-- FastAPI 호출 시 수 네트워크 지연으로 인한 스레드 풀 고갈 문제를 해결하기 위해 Java 21 가상 스레드를 도입함. 수천 건의 동시 요청에서도 스레드 블로킹 없이 안정적으로 처리함.
+### 성능 및 동시성 최적화
+- **Java 21 가상 스레드**
+    - 문제: AI 이미지 분석과 같은 무거운 연산을 외부 FastAPI 서버로 위임하는 구조에서, 응답 대기로 인한 네트워크 연결 지연이 동반. 기존 시스템에서는 병목 현상이 발생.
+    - 해결: 가상 스레드(Virtual Threads)' 기능을 `application.properties`에 즉시 도입. 메모리 고갈 없이 동시 접속자가 AI 검색을 요청해도 안정적으로 응답을 대기하고 분배할 수 있게 되어, 시스템 동시성(Throughput) 성능 향상
+- **CompletableFuture 병렬 벡터 검색**
+    - 문제: 사용자가 이미지 업로드 후 자사 상품 테이블과 외부 상품 테이블 두 곳에서 유사 상품을 검색을 순차 실행 시 응답 시간이 증가
+    - 해결: `CompletableFuture.supplyAsync()`로 자사 상품 검색과 외부 상품 검색을 비동기 실행하고, `allOf().join()`으로 두 결과가 모두 도착할 때까지 대기하는 병렬 파이프라인 구축
+- **DTO 컴파일 타임 변환 (MapStruct)**
+  - 문제: DTO 변환 코드 반복 작성 및 런타임 변환 비용 발생
+  - 해결: 컴파일 타임에 매핑 코드를 자동 생성해 런타임 변환 비용 제거
 
-### 2. pgvector 벡터 유사도 검색
-- 고차원 임베딩 벡터를 PostgreSQL의 pgvector 확장을 활용해 DB 엔진 단에서 코사인 유사도를 직접 연산하는 Native Query를 구축
+### 데이터베이스 최적화
+- **pgvector 벡터 유사도 검색**
+    - 문제: 고차원 임베딩 벡터를 백엔드에서 비교 시 OOM 발생
+    - 해결:  pgvector 확장으로 DB 레벨에서 코사인 유사도를 직접 연산하도록 네이티브 쿼리 구축
+- **JPA 조회 최적화**
+    - 문제: JPA Entity 전체 로딩 시 불필요한 컬럼까지 메모리에 적재, 
+    - 해결: Projection 사용으로 필요한 필드만 추출, `@Transactional(readOnly = true)` 적용으로 DB 락 경합 최소화
 
-### 3. Stateless OAuth2 + Cookie 기반 인증
-Scale-out 환경에서 Redis 같은 세션 클러스터링 비용을 없애기 위해, Spring Security의 소셜 로그인 흐름을 HTTP-Only 쿠키 기반으로 재구현(AuthorizationRequestRepository)하고 성공 시 JWT만 교환하는 완전 무상태(Stateless) 아키텍처를 구현했습니다. 악의적 요청은 필터 단에서 즉시 차단합니다.
+### 인증 및 보안
+- **OAuth2 소셜 로그인**
+    - Google · Naver · Kakao 소셜 로그인 지원
+- **쿠키 기반 인증**
+    - 문제: Spring Security 소셜 로그인 흐름에서 세션 저장이 강제됨
+    - 해결: 소셜 로그인 흐름을 `HTTP-Only` 쿠키 기반으로 재구현해 세션을 완전히 제거하고, 로그인 성공 시 JWT만 발급하는 구조로 설계. 인증되지 않은 요청은 필터에서 즉시 차단
 
-### 4. Spring 6 Declarative HTTP Interfaces
-FastAPI 통신에 @HttpExchange 어댑터(Reactor Netty 기반)를 커스텀 튜닝(커넥션 풀 500개, 120s 타임아웃)하여 사용했습니다. RestTemplate나 FeignClient 대비 보일러플레이트를 최소화하고 코드 유지보수성을 높였습니다.
+### 외부 연동
+- **선언적 HTTP 클라이언트**
+    - 문제: 기존 HTTP 클라이언트 방식은 반복 코드가 많고 타임아웃 관리가 어려움
+    - 해결: Spring 6의 `@HttpExchange`로 인터페이스 선언만으로 FastAPI 통신 구현, 커넥션 풀 500개 · 타임아웃 120s로 튜닝
+- **트렌드 조회 캐싱 (Caffeine Cache)**
+  - 문제: 네이버 API를 통한 트렌드·추천 조회마다 반복 DB 호출 발생
+  - 해결: Caffeine 인메모리 캐시(TTL 10분)로 반복 DB 호출 최소화
 
-### 5. CompletableFuture 병렬 벡터 검색
-이미지 업로드 후 내부 DB와 네이버 외부 DB에서의 유사 상품 검색을 CompletableFuture.supplyAsync()로 동시에 병렬 실행하고 allOf().join()으로 합산합니다. 순차 실행 대비 응답 시간을 단일 검색 수준으로 단축했습니다.
-
-### 6. MapStruct + Caffeine Cache
-MapStruct로 DTO ↔ Entity 변환을 컴파일 타임에 생성해 런타임 리플렉션 오버헤드를 제거하고, Caffeine 인메모리 캐시(TTL 10분)로 트렌드·추천 조회의 반복 DB 호출을 최소화했습니다.
-
-### 7. Interface Projection + 읽기 전용 트랜잭션
-SimilarProductProjection으로 Native Query 결과에서 필요한 6개 필드(productId, title, price, imageUrl, productLink, similarityScore)만 추출해 불필요한 메모리 로딩과 Dirty Checking을 방지합니다. 조회 전용 메서드에는 @Transactional(readOnly = true)를 적용해 DB 락 경합을 줄였습니다.
-
-### 8. Supabase Storage 분리
-바이너리 파일을 RDBMS에 직접 저장하지 않고 Supabase Storage 버킷에 업로드한 뒤 공개 URL만 DB에 기록합니다. RDBMS 비대화를 방지하고 프론트엔드의 이미지 스트리밍 성능을 향상시켰습니다.
-
-### 9. Docker Multi-stage Build
-1단계(JDK)에서 빌드 후 2단계(JRE)에만 실행 파일을 복사하는 멀티 스테이지 빌드로 컨테이너 이미지 크기를 최소화하고 공격 벡터를 줄였습니다. Swagger, P6Spy를 통합하여 프론트엔드 팀과의 즉각적인 API 연동이 가능합니다.
+### 스토리지 분리 설계
+- **Supabase Storage 분리**
+    - 문제: 바이너리 파일을 DB에 직접 저장 시 용량 및 백업 부담 증가
+    - 해결: Supabase Storage 버킷에 파일 업로드 후 URL을 DB에 기록하여 비대화 방지
 
 ## 💻 로컬 실행 및 배포
 
