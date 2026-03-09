@@ -179,4 +179,5 @@ $ ./gradlew bootRun
 > 서버 구동 후 http://localhost:8080/swagger-ui.html 에서 전체 API를 테스트할 수 있습니다.
 
 ##  ERD
-<img width="1963" height="1503" alt="erd_최종의최종의최종" src="https://github.com/user-attachments/assets/7925c42e-9eb7-4af1-89eb-3757ce458367" />
+<img width="1735" height="1705" alt="erd_최종의최종의최종의최종" src="https://github.com/user-attachments/assets/8135fa9f-9eae-4ba7-8ba2-cac4f8696d83" />
+
