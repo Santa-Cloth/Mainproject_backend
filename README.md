@@ -129,6 +129,9 @@
     - 문제: 바이너리 파일을 DB에 직접 저장 시 용량 및 백업 부담 증가
     - 해결: Supabase Storage 버킷에 파일 업로드 후 URL을 DB에 기록하여 비대화 방지
 
+##  🗂 ERD
+<img width="1735" height="1705" alt="erd_최종의최종의최종의최종" src="https://github.com/user-attachments/assets/c48fc1ab-0186-4885-b138-b3155e574478" />
+
 ## 💻 로컬 실행 및 배포
 
 ### 환경 변수 설정(.env)
@@ -177,6 +180,3 @@ $ ./gradlew bootRun
 ```
 
 > 서버 구동 후 http://localhost:8080/swagger-ui.html 에서 전체 API를 테스트할 수 있습니다.
-
-##  🗂 ERD
-<img width="1735" height="1705" alt="erd_최종의최종의최종의최종" src="https://github.com/user-attachments/assets/c48fc1ab-0186-4885-b138-b3155e574478" />
