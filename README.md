@@ -117,17 +117,17 @@
     - 해결: 소셜 로그인 흐름을 `HTTP-Only` 쿠키 기반으로 재구현해 세션을 완전히 제거하고, 로그인 성공 시 JWT만 발급하는 구조로 설계. 인증되지 않은 요청은 필터에서 즉시 차단
 
 ### 4. 외부 연동
-- **선언적 HTTP 클라이언트**
-    - 문제: 기존 HTTP 클라이언트 방식은 반복 코드가 많고 타임아웃 관리가 어려움
-    - 해결: Spring 6의 `@HttpExchange`로 인터페이스 선언만으로 FastAPI 통신 구현, 커넥션 풀 500개 · 타임아웃 120s로 튜닝
-- **트렌드 조회 캐싱 (Caffeine Cache)**
-  - 문제: 네이버 API를 통한 트렌드·추천 조회마다 반복 DB 호출 발생
-  - 해결: Caffeine 인메모리 캐시(TTL 10분)로 반복 DB 호출 최소화
+- **WebClient 기반 FastAPI 통신**
+    - 문제: 이미지 분석 응답 대기 중 기본 타임아웃으로 연결이 끊어지는 문제 발생
+    - 해결: `WebClient`로 FastAPI 연동 후 응답 타임아웃을 120초로 튜닝하여 안정적 대응
+- **트렌드 조회 캐싱**
+  - 문제: 네이버 API를 통한 스타일 트렌드 조회마다 반복 호출로 한도 초과 발생
+  - 해결: Spring `@Cacheable`로 캐싱하여 반복 호출 제거
 
 ### 5. 스토리지 분리 설계
 - **Supabase Storage 분리**
     - 문제: 바이너리 파일을 DB에 직접 저장 시 용량 및 백업 부담 증가
-    - 해결: Supabase Storage 버킷에 파일 업로드 후 URL을 DB에 기록하여 비대화 방지
+    - 해결: Supabase Storage에 파일 업로드 후 URL을 DB에 기록하여 비대화 방지
 
 ##  🗂 ERD
 <img width="1735" height="1705" alt="erd_최종의최종의최종의최종" src="https://github.com/user-attachments/assets/c48fc1ab-0186-4885-b138-b3155e574478" />
