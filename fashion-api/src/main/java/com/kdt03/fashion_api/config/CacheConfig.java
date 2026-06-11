@@ -40,7 +40,14 @@ public class CacheConfig {
                 .maximumSize(100));
         cacheManager.setCacheNames(Arrays.asList(
                 "recommendations", "recommendations768", "analysisResults",
-                "trends", "products", "stores", "sales", "naverProducts"));
+                "products", "stores", "sales", "naverProducts"));
+        
+        com.github.benmanes.caffeine.cache.Cache<Object, Object>
+        trendCache = Caffeine.newBuilder()
+            .expireAfterWrite(24, TimeUnit.HOURS)
+            .maximumSize(100).build();
+        cacheManager.registerCustomCache("trends", trendCache);
+
         return cacheManager;
     }
 
