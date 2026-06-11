@@ -119,7 +119,7 @@
     - 해결: Spring 6의 `@HttpExchange`로 인터페이스 선언만으로 FastAPI 통신 구현, 커넥션 풀 500개 · 타임아웃 120s로 튜닝
 - **트렌드 조회 캐싱 (Caffeine Cache)**
   - 문제: 네이버 API를 통한 스타일 트렌드 조회마다 반복 호출로 한도 초과 발생
-  - 해결: Caffeine 인메모리 캐시(TTL 10분)로 반복 호출 최소화
+  - 해결: Caffeine 인메모리 캐시(TTL 24시간)로 반복 호출 최소화
 
 ### 5. 스토리지 분리 설계
 - **Supabase Storage 분리**
